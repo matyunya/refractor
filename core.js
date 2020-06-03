@@ -6,12 +6,14 @@ var restore = capture()
 
 // istanbul ignore next - Don't allow Prism to run on page load in browser or
 // to start messaging from workers.
-var ctx =
-  typeof window === 'undefined'
-    ? typeof self === 'undefined'
-      ? {}
-      : self
-    : window
+var ctx = (typeof window !== 'undefined')
+  ? window   // if in browser
+  : (
+    (typeof WorkerGlobalScope !== 'undefined' && self instanceof WorkerGlobalScope)
+    ? self // if in worker
+    : {}   // if in node js
+);
+
 
 ctx.Prism = {manual: true, disableWorkerMessageHandler: true}
 
